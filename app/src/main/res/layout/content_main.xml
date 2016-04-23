@@ -19,6 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="36dp"
         android:minWidth="100dp"
+        android:visibility="gone"
         android:text="Show Location\n(GPS)" />
 
     <Button
@@ -29,12 +30,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="44dp"
         android:minWidth="100dp"
+        android:visibility="gone"
         android:text="Show Location\n(network provider)" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Upload"
+        android:visibility="gone"
         android:id="@+id/upload"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
@@ -42,10 +45,21 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="开始app"
+        android:text="Start app"
         android:id="@+id/start"
         android:layout_marginTop="46dp"
         android:layout_below="@+id/upload"
         android:layout_alignLeft="@+id/upload"
         android:layout_alignStart="@+id/upload" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:layout_below="@+id/start"
+        android:text="Wifi Connection"
+        android:id="@+id/Wifibutton"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

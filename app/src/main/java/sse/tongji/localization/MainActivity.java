@@ -18,6 +18,7 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.CellLocation;
@@ -34,16 +35,25 @@ import android.widget.Button;
 import android.widget.Toast;
 import org.xutils.x;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.xutils.http.RequestParams;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
+import java.util.Vector;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmObject;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.RecordRealmProxy;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnNWShowLocation;
     Button uploadButton;
     Button startApp;
+    Button wifiButton;
     boolean isWifiConn;
     static public RealmConfiguration realmConfig;
     private AppLocationService appLocationService;
@@ -320,109 +331,9 @@ public class MainActivity extends AppCompatActivity {
 //            System.out.println("unconnection: "+isWifiConn);
 //        }
 //
-//
-//
-//        //Register a broadcast type
-//        registerReceiver(new BatteryBroadcastReceiver(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-//
-//        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-//        sse.tongji.localization.LocationManager.setTelephonyManager(telephonyManager);
-//
-//        PhoneStateListener phoneStateListener = new PhoneStateListener() {
-//            public void onCallForwardingIndicatorChanged(boolean cfi) {}
-//            public void onCallStateChanged(int state, String incomingNumber) {}
-//            public void onCellLocationChanged(CellLocation location) {}
-//            public void onDataActivity(int direction) {}
-//            public void onDataConnectionStateChanged(int state) {}
-//            public void onMessageWaitingIndicatorChanged(boolean mwi) {}
-//            public void onServiceStateChanged(ServiceState serviceState) {}
-//
-//            @Override
-//            public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-//                super.onSignalStrengthsChanged(signalStrength);
-//                int signal = signalStrength.getGsmSignalStrength();
-//                signal = (2 * signal) - 113; // -> dBm
-//                System.out.println("signal" +signal);
-//                sse.tongji.localization.LocationManager.setSignalStrength(String.valueOf(signal));
-//            }
-//        };
-//
-//        telephonyManager.listen(phoneStateListener,
-//                PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR |
-//                        PhoneStateListener.LISTEN_CALL_STATE |
-//                        PhoneStateListener.LISTEN_CELL_LOCATION |
-//                        PhoneStateListener.LISTEN_DATA_ACTIVITY |
-//                        PhoneStateListener.LISTEN_DATA_CONNECTION_STATE |
-//                        PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR |
-//                        PhoneStateListener.LISTEN_SERVICE_STATE |
-//                        PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-//
-//        GsmCellLocation cellLocation = (GsmCellLocation) telephonyManager.getCellLocation();
-//        sse.tongji.localization.LocationManager.setCellLocation(cellLocation);
-//
-//        Long tsLong = System.currentTimeMillis()/1000;
-//        String timeStamp = tsLong.toString();
-//        System.out.println("timeStamp " +timeStamp);
-//
-//
-//        String deviceId =telephonyManager.getDeviceId();
-//        System.out.println("device_id " +deviceId);
-//
-//        String  IMSI;
-//        IMSI = telephonyManager.getSubscriberId();
-//        System.out.println("IMSI :" +IMSI);
-//
-//        // Device model
-//        String phoneModel = android.os.Build.MODEL;
-//        // Android version
-//        String androidVersion = android.os.Build.VERSION.RELEASE;
-//        //info
-//        System.out.println("PhoneModel :" +phoneModel);
-//
-//        System.out.println("AndroidVersion :" +androidVersion);
-//
-////        int cid = cellLocation.getCid();
-////        int lac = cellLocation.getLac();
-////        System.out.println("cid " +cid);
-////        System.out.println("lac " +lac);
-//        String networkOperator = telephonyManager.getNetworkOperator();
-//        if (TextUtils.isEmpty(networkOperator) == false) {
-//            int mcc = Integer.parseInt(networkOperator.substring(0, 3));
-//            int mnc = Integer.parseInt(networkOperator.substring(3));
-//            System.out.println("mcc " +mcc);
-//            System.out.println("mnc " +mnc);
-//        }
-//
-//
-//
-//        appLocationService = new AppLocationService(
-//                MainActivity.this);
-//
-//        sse.tongji.localization.LocationManager.setAppLocationService(appLocationService);
-//
-//        Location GpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
-//        if (GpsLocation != null) {
-//
-//            double latitude = GpsLocation.getLatitude();
-//            double longitude = GpsLocation.getLongitude();
-//            System.out.println("latitude " +latitude);
-//            System.out.println("longitude " +longitude);
-//        }
-//
-//
-//        Location netLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
-//
-//        if (netLocation != null) {
-//            double latitude = netLocation.getLatitude();
-//            double longitude = netLocation.getLongitude();
-//            System.out.println("latitude " +latitude);
-//            System.out.println("longitude " +longitude);
-//        }
-//
-//
-//
-        btnGPSShowLocation = (Button) findViewById(R.id.btnGPSShowLocation);
 
+        btnGPSShowLocation = (Button) findViewById(R.id.btnGPSShowLocation);
+        btnGPSShowLocation.setVisibility(View.INVISIBLE);
         btnGPSShowLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -445,7 +356,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        wifiButton=(Button) findViewById(R.id.Wifibutton);
+        wifiButton.setVisibility(View.INVISIBLE);
+        wifiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                dialog();
+            }
+        });
+
+
+
         btnNWShowLocation = (Button) findViewById(R.id.btnNWShowLocation);
+        btnNWShowLocation.setVisibility(View.INVISIBLE);
         btnNWShowLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -468,19 +391,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         uploadButton = (Button) findViewById(R.id.upload);
+        uploadButton.setVisibility(View.INVISIBLE);
         uploadButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
-                upload();
+                DeviceFactory factory = new DeviceFactory();
+                if(isWifiConn()){
+                    upload();
+                }
             }
         });
 
         startApp = (Button) findViewById(R.id.start);
+        startApp.setVisibility(View.VISIBLE);
         startApp.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View view) {
+
+                //show the button to upload
+                btnGPSShowLocation.setVisibility(View.VISIBLE);
+                btnNWShowLocation.setVisibility(View.VISIBLE);
+                uploadButton.setVisibility(View.VISIBLE);
+                wifiButton.setVisibility(View.VISIBLE);
                 if (ContextCompat.checkSelfPermission(MainActivity.this,
                         Manifest.permission.INTERNET)
                         == PackageManager.PERMISSION_GRANTED &&
@@ -496,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
                         ContextCompat.checkSelfPermission(MainActivity.this,
                                 Manifest.permission.ACCESS_FINE_LOCATION)
                                 == PackageManager.PERMISSION_GRANTED )
-                {Log.d("permission", "ok");
+                {   Log.d("permission", "ok");
                     initLocation();
                     Timer timer = new Timer();
                     timer.schedule(new RecordTask(), 0, 1000);
@@ -505,11 +438,8 @@ public class MainActivity extends AppCompatActivity {
                 else requetPermission();
             }
         });
-//
-//        RequestParams requestParams = new RequestParams("http://tztztztztz.org:3000/device");
-//        requestParams.addBodyParameter("", "{\"hello\":\"heheda\"}");
-//        //requestParams.setHeader("Content-Type", "application/json");
-//        HttpUtil.post(requestParams, handler, 0, 1);
+
+
 
     }
 
@@ -517,13 +447,40 @@ public class MainActivity extends AppCompatActivity {
         Realm realm = Realm.getInstance(realmConfig);
         RealmQuery<Record> query = realm.where(Record.class);
         RealmResults<Record> records = query.findAll();
+        Log.d("Alldata",  records.toString());
+        List<RecordJson> recordJsons = new ArrayList<RecordJson>();
+        for(Record record1 : records){
+            recordJsons.add(new RecordJson(record1.getTimeStamp(),
+                    record1.getDeviceId(),
+                    record1.getLac(),
+                    record1.getBass(),
+                    record1.getGLatitude(),record1.getGLongitude(), record1.getNLatitude(), record1.getNLongitude(), record1.getBatteryUseage()));
+        }
+
+        DeviceFactory deviceFactory=new DeviceFactory();
+       Device device= deviceFactory.collectRecord();
+
+        List<DeviceJson> deviceJsons=new ArrayList<DeviceJson>();
+        deviceJsons.add(new DeviceJson(device.getDeviceId(),device.getMcc(),device.getMnc(),device.getPhoneModel(),device.getAndroidVersion()));
+
+
         Gson gson = new Gson();
-        String string = gson.toJson(records);
-        Log.d("Alldata", string);
-//        RequestParams requestParams = new RequestParams("http://tztztztztz.org:3000/records");
-//        requestParams.addBodyParameter("", string);
-//        //requestParams.setHeader("Content-Type", "application/json");
-//        HttpUtil.post(requestParams, handler, 0, 1);
+        Gson gson1=new Gson();
+        String string = gson.toJson(recordJsons);
+        String deviceString=gson1.toJson(deviceJsons);
+
+
+        RequestParams requestParams = new RequestParams("http://tztztztztz.org:3000/records");
+        requestParams.addBodyParameter("", string);
+        HttpUtil.post(requestParams, handler, 0, 1);
+
+        RequestParams requestParams1 = new RequestParams("http://tztztztztz.org:3000/device");
+        System.out.println("device content "+deviceString);
+        requestParams1.addBodyParameter("",deviceString);
+        HttpUtil.post(requestParams1, handler, 0, 1);
+
+
+
     }
 
 
@@ -587,6 +544,36 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+   protected void dialog(){
+       AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+       alertDialog.setTitle("WiFi Condition");
+       if(isWifiConn()){
+           alertDialog.setMessage("Yes, WIFI is enabled!");
+       }
+       else{
+           alertDialog.setMessage("No, WIFI is not enabled!");
+       }
+
+       alertDialog.setPositiveButton(" upload now", new DialogInterface.OnClickListener() {
+           @Override
+           public void onClick(DialogInterface dialog, int which) {
+               upload();
+               Toast.makeText(getApplicationContext(),"Upload successfully",Toast.LENGTH_SHORT).show();
+           }
+       });
+       alertDialog.setNegativeButton("Next time", new DialogInterface.OnClickListener() {
+           @Override
+           public void onClick(DialogInterface dialog, int which) {
+               Toast.makeText(getApplicationContext(), "Not ready", Toast.LENGTH_SHORT).show();
+
+           }
+       });
+
+       //设置对话框是可取消的
+       alertDialog.setCancelable(true);
+       AlertDialog dialog=alertDialog.create();
+       dialog.show();
+   }
 
     private final Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {

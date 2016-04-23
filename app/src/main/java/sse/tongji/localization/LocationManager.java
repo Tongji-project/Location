@@ -1,6 +1,7 @@
 package sse.tongji.localization;
 
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 
@@ -27,7 +28,12 @@ public class LocationManager {
         LocationManager.telephonyManager = telephonyManager;
     }
 
+
     static private String batteryUsage = "";
+
+    static private String mcc="";
+    static private String deviceId="";
+    static private String mnc="";
 
     static private String signalStrength = "";
 
@@ -44,19 +50,40 @@ public class LocationManager {
     }
 
 
+
+
     static public String getDeviceId(){
         return telephonyManager.getDeviceId();
     }
 
-    static public String getLac(){
-        return "lac";
-        //return String.valueOf(cellLocation.getLac());
+    static public void setDeviceId(String deviceId){
+        LocationManager.deviceId=deviceId;
     }
 
-    static public String getBass(){
-        return "bass";
-        //return String.valueOf(cellLocation.getCid());
+    static public void setMcc(String mcc){
+        LocationManager.mcc=mcc;
     }
+
+    static public void setMnc(String mnc){
+        LocationManager.mnc=mnc;
+    }
+
+
+    static public String getLac(){
+        return String.valueOf(cellLocation.getLac());
+    }
+    static public String getMnc(){
+        String networkOperator = telephonyManager.getNetworkOperator();
+        return String.valueOf(Integer.parseInt(networkOperator.substring(3)));}
+    static public String getMcc(){
+        String networkOperator = telephonyManager.getNetworkOperator();
+        return String.valueOf(Integer.parseInt(networkOperator.substring(0, 3)));
+    }
+    static public String getBass(){
+        return String.valueOf(cellLocation.getCid());
+    }
+
+
 
 
     static public sse.tongji.localization.Location getGLocation(){

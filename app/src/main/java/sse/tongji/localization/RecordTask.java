@@ -15,11 +15,9 @@ public class RecordTask extends TimerTask {
 
     @Override
     public void run() {
-        Log.d("time", "3123");
         Realm realm = Realm.getInstance(MainActivity.realmConfig);
-//        Record record = factory.collectRecord();
-        Record record = new Record();
-        record.setTimeStamp("31321");
+        Record record = factory.collectRecord();
+        Log.d("location", record.getGLatitude());
         realm.beginTransaction();
         Record recordRealm = realm.copyToRealm(record);
         realm.commitTransaction();

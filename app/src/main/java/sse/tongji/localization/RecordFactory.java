@@ -1,12 +1,10 @@
 package sse.tongji.localization;
 
 /**
- * Created by tanjingru on 4/22/16.
+ * Created by tanjingru on 4/22/16.kaiyuab
  */
 
 public class RecordFactory {
-
-
 
     public RecordFactory() {
 
