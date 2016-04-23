@@ -3,6 +3,8 @@ package sse.tongji.localization;
 /**
  * Created by 13987 on 2016/4/4.
  */
+
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 public class AppLocationService extends Service implements LocationListener {
 
@@ -31,11 +34,9 @@ public class AppLocationService extends Service implements LocationListener {
 
     }
 
-    public Location getLocation(String provider) {
+    public Location getLocation(String provider) throws SecurityException {
         if (locationManager.isProviderEnabled(provider)) {
-            if(Build.VERSION.SDK_INT >= 23){
-                checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION );
-                checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION );
+            if (Build.VERSION.SDK_INT >= 23) {
 
             }
             locationManager.requestLocationUpdates(provider, MIN_TIME_FOR_UPDATE, MIN_DISTANCE_FOR_UPDATE, this);

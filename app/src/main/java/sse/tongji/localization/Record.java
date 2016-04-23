@@ -1,89 +1,91 @@
 package sse.tongji.localization;
 
+import io.realm.RealmObject;
+
 /**
  * Created by 13987 on 2016/4/21.
  */
-public class Record {
-    public static String timeStamp;
-    public static String deviceId;
-    public static String lac;
-    public static String bass;
-    public static String GLatitude;
-    public static String GLongitude;
-    public static String NLatitude;
-    public static String NLongitude;
-    public static String batteryUseage;
+public class Record extends RealmObject {
+    private String timeStamp;
+    private String deviceId;
+    private String lac;
+    private String bass;
+    private String GLatitude;
+    private String GLongitude;
+    private String NLatitude;
+    private String NLongitude;
+    private String batteryUseage;
 
-    public static String getTimeStamp() {
+    public String getTimeStamp() {
         return timeStamp;
     }
 
-    public static void setTimeStamp(String timeStamp) {
-        Record.timeStamp = timeStamp;
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
-    public static String getDeviceId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public static void setDeviceId(String deviceId) {
-        Record.deviceId = deviceId;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
-    public static String getLac() {
+    public String getLac() {
         return lac;
     }
 
-    public static void setLac(String lac) {
-        Record.lac = lac;
+    public void setLac(String lac) {
+        this.lac = lac;
     }
 
-    public static String getBass() {
+    public String getBass() {
         return bass;
     }
 
-    public static void setBass(String bass) {
-        Record.bass = bass;
+    public void setBass(String bass) {
+        this.bass = bass;
     }
 
-    public static String getGLatitude() {
+    public String getGLatitude() {
         return GLatitude;
     }
 
-    public static void setGLatitude(String GLatitude) {
-        Record.GLatitude = GLatitude;
+    public void setGLatitude(String GLatitude) {
+        this.GLatitude = GLatitude;
     }
 
-    public static String getGLongitude() {
+    public String getGLongitude() {
         return GLongitude;
     }
 
-    public static void setGLongitude(String GLongitude) {
-        Record.GLongitude = GLongitude;
+    public void setGLongitude(String GLongitude) {
+        this.GLongitude = GLongitude;
     }
 
-    public static String getNLatitude() {
+    public String getNLatitude() {
         return NLatitude;
     }
 
-    public static void setNLatitude(String NLatitude) {
-        Record.NLatitude = NLatitude;
+    public void setNLatitude(String NLatitude) {
+        this.NLatitude = NLatitude;
     }
 
-    public static String getNLongitude() {
+    public String getNLongitude() {
         return NLongitude;
     }
 
-    public static void setNLongitude(String NLongitude) {
-        Record.NLongitude = NLongitude;
+    public void setNLongitude(String NLongitude) {
+        this.NLongitude = NLongitude;
     }
 
-    public static String getBatteryUseage() {
+    public String getBatteryUseage() {
         return batteryUseage;
     }
 
-    public static void setBatteryUseage(String batteryUseage) {
-        Record.batteryUseage = batteryUseage;
+    public void setBatteryUseage(String batteryUseage) {
+        this.batteryUseage = batteryUseage;
     }
 
     public Record() {

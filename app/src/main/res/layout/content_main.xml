@@ -30,4 +30,22 @@
         android:layout_marginTop="44dp"
         android:minWidth="100dp"
         android:text="Show Location\n(network provider)" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload"
+        android:id="@+id/upload"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开始app"
+        android:id="@+id/start"
+        android:layout_marginTop="46dp"
+        android:layout_below="@+id/upload"
+        android:layout_alignLeft="@+id/upload"
+        android:layout_alignStart="@+id/upload" />
 </RelativeLayout>

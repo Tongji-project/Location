@@ -1,55 +1,58 @@
 package sse.tongji.localization;
 
+import io.realm.Realm;
+import io.realm.RealmObject;
+
 /**
  * Created by 13987 on 2016/4/21.
  */
-public class Device {
-    public static String DeviceId;
-    public static String mcc;
-    public static String mnc;
-    public static String PhoneModel;
-    public static String AndroidVersion;
+public class Device extends RealmObject{
+    private String DeviceId;
+    private String mcc;
+    private String mnc;
+    private String PhoneModel;
+    private String AndroidVersion;
 
     public Device() {
     }
 
-    public static String getDeviceId() {
+    public String getDeviceId() {
         return DeviceId;
     }
 
-    public static void setDeviceId(String deviceId) {
+    public void setDeviceId(String deviceId) {
         DeviceId = deviceId;
     }
 
-    public static String getMcc() {
+    public String getMcc() {
         return mcc;
     }
 
-    public static void setMcc(String mcc) {
-        Device.mcc = mcc;
+    public void setMcc(String mcc) {
+        this.mcc = mcc;
     }
 
-    public static String getMnc() {
+    public String getMnc() {
         return mnc;
     }
 
-    public static void setMnc(String mnc) {
-        Device.mnc = mnc;
+    public void setMnc(String mnc) {
+        this.mnc = mnc;
     }
 
-    public static String getPhoneModel() {
+    public String getPhoneModel() {
         return PhoneModel;
     }
 
-    public static void setPhoneModel(String phoneModel) {
+    public void setPhoneModel(String phoneModel) {
         PhoneModel = phoneModel;
     }
 
-    public static String getAndroidVersion() {
+    public String getAndroidVersion() {
         return AndroidVersion;
     }
 
-    public static void setAndroidVersion(String androidVersion) {
+    public void setAndroidVersion(String androidVersion) {
         AndroidVersion = androidVersion;
     }
 }
